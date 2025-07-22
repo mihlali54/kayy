@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Music Streaming App</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f7; margin: 0; padding: 0; }
+        .app-container { max-width: 400px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 24px; }
+        h1 { text-align: center; color: #333; }
+        .track-list { list-style: none; padding: 0; }
+        .track { display: flex; align-items: center; margin-bottom: 16px; }
+        .track img { width: 48px; height: 48px; border-radius: 8px; margin-right: 16px; }
+        .track-info { flex: 1; }
+        .track-title { font-weight: bold; }
+        .track-artist { color: #888; font-size: 0.9em; }
+        .play-btn { background: #0071e3; color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; }
+        .player { margin-top: 24px; text-align: center; }
+        audio { width: 100%; outline: none; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1>Music Stream</h1>
+        <ul class="track-list" id="trackList">
+            <!-- Tracks will be injected here -->
+        </ul>
+        <div class="player" id="player" style="display:none;">
+            <div id="nowPlaying"></div>
+            <audio id="audioPlayer" controls></audio>
+        </div>
+    </div>
+    <script>
+        // Example tracks (royalty-free preview URLs)
+        const tracks = [
+            {
+                title: "Acoustic Breeze",
+                artist: "Benjamin Tissot",
+                cover: "https://www.bensound.com/bensound-img/acousticbreeze.jpg",
+                url: "https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3"
+            },
+            {
+                title: "Creative Minds",
+                artist: "Benjamin Tissot",
+                cover: "https://www.bensound.com/bensound-img/creativeminds.jpg",
+                url: "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3"
+            },
+            {
+                title: "Sunny",
+                artist: "Benjamin Tissot",
+                cover: "https://www.bensound.com/bensound-img/sunny.jpg",
+                url: "https://www.bensound.com/bensound-music/bensound-sunny.mp3"
+            }
+        ];
+
+        const trackList = document.getElementById('trackList');
+        const player = document.getElementById('player');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const nowPlaying = document.getElementById('nowPlaying');
+
+        tracks.forEach((track, idx) => {
+            const li = document.createElement('li');
+            li.className = 'track';
+            li.innerHTML = `
+                <img src="${track.cover}" alt="cover">
+                <div class="track-info">
+                    <div class="track-title">${track.title}</div>
+                    <div class="track-artist">${track.artist}</div>
+                </div>
+                <button class="play-btn" data-idx="${idx}">Play</button>
+            `;
+            trackList.appendChild(li);
+        });
+
+        trackList.addEventListener('click', function(e) {
+            if (e.target.classList.contains('play-btn')) {
+                const idx = e.target.getAttribute('data-idx');
+                const track = tracks[idx];
+                audioPlayer.src = track.url;
+                nowPlaying.innerHTML = `<strong>Now Playing:</strong> ${track.title} - ${track.artist}`;
+                player.style.display = 'block';
+                audioPlayer.play();
+            }
+        });
+    </script>
+</body>
+</html>
